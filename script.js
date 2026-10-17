@@ -1,14 +1,12 @@
-//calculator UI
-let buttons = [
-    ["7","8","9","÷"],
-    ["4","5","6","x"],
-    ["1","2","3","-"],
-    ["0","C","=","+"]
-]
-const container = document.querySelector("div.buttons");
-const display = document.querySelector(".display-value");
-
 const calculator = {
+    buttons: [
+        ["7", "8", "9", "÷"],
+        ["4", "5", "6", "x"],
+        ["1", "2", "3", "-"],
+        ["0", "C", "=", "+"],
+    ],
+    container: document.querySelector("div.buttons"),
+    display: document.querySelector(".display-value"),
     currentValue: "0",
     storedValue: null,
     selectedOperator: null,
@@ -44,7 +42,7 @@ const calculator = {
     },
 
     updateDisplay() {
-        display.textContent = this.currentValue;
+        this.display.textContent = this.currentValue;
     },
 
     calculate() {
@@ -92,35 +90,48 @@ const calculator = {
         }
         this.updateDisplay();
     },
+
+    renderButtons() {
+        for (const row of this.buttons) {
+            const buttonRow = document.createElement("div");
+
+            for (const button of row) {
+                const buttonElement = document.createElement("button");
+                buttonElement.classList.add("btn");
+                buttonElement.textContent = button;
+
+                switch (button) {
+                    case "C":
+                        buttonElement.classList.add("utility");
+                        break;
+                    case "=":
+                        buttonElement.classList.add("equal");
+                        break;
+                    case "÷":
+                    case "x":
+                    case "-":
+                    case "+":
+                        buttonElement.classList.add("op");
+                        break;
+                    default:
+                        buttonElement.classList.add("num");
+                }
+
+                buttonElement.addEventListener(
+                    "click",
+                    () => this.handleButton(button),
+                );
+                buttonRow.appendChild(buttonElement);
+            }
+
+            this.container.appendChild(buttonRow);
+        }
+    },
+
+    initialize() {
+        this.renderButtons();
+        this.updateDisplay();
+    },
 };
 
-for(const row of buttons){
-    const btnRow = document.createElement("div")
-    for(const button of row){
-        const btn = document.createElement("button");
-        btn.classList.add("btn")
-        btn.textContent = button;
-        switch(button){
-            case "C":
-                btn.classList.add("utility")
-                break;
-            case "=":
-                btn.classList.add("equal")
-                break;
-            case "÷":
-            case "x":
-            case "-":
-            case "+":
-                btn.classList.add("op")
-                break;
-            default:
-                btn.classList.add("num")
-                break;
-        }
-        btn.addEventListener("click", () => calculator.handleButton(button));
-        btnRow.appendChild(btn);
-    }
-    container.appendChild(btnRow);
-}
-
-calculator.updateDisplay();
+calculator.initialize();
