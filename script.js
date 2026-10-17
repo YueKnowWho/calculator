@@ -23,7 +23,7 @@ const calculator = {
     },
 
     div(a, b) {
-        return a / b;
+        return Math.round((a / b)*10000)/10000;
     },
 
     mult(a, b) {
